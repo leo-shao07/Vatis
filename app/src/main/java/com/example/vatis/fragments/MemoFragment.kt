@@ -39,9 +39,9 @@ class MemoFragment : Fragment(), CellClickListener {
             .orderBy("order.day")
 
         // for firestore query, sort later
-        val queryMemoItemList = ArrayList<MemoSubItem>()
+//        val queryMemoItemList = ArrayList<MemoSubItem>()
         // main memo item list
-        val memoItemList = ArrayList<MemoItem>()
+        var memoItemList = ArrayList<MemoItem>()
     }
 
 
@@ -56,45 +56,47 @@ class MemoFragment : Fragment(), CellClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_memo, container, false)
 
-        fetchMemoSubList()
+//        fetchMemoSubList()
 
         // TODO: add OnSnapshotListener to capture Plan order change
+        subscribeToRealTimeUpdates()
 
-        view.memo_list.layoutManager = LinearLayoutManager(activity)
-        view.memo_list.adapter = MemoItemAdapter(memoItemList, this)
+//        view.memo_list.layoutManager = LinearLayoutManager(activity)
+//        view.memo_list.adapter = MemoItemAdapter(memoItemList, this)
         return view
     }
 
-    private fun fetchMemoSubList() = CoroutineScope(Dispatchers.IO).launch{
-        try {
-            // FireStore functionalities
-            planRef.get().addOnSuccessListener { task ->
-                for (document in task) {
-                    val data = document.data
-                    val spotName = data["name"] as String
-                    val memo = data["memo"] as String
-                    val order = data["order"] as Map<*, *>
-                    val dayPosPair = Pair(order["day"], order["position"])
-
-                    // add to memoSubItemList here
-                    queryMemoItemList.add(MemoSubItem(spotName, memo, dayPosPair as Pair<Long, Long>))
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting documents: ", exception)
-            }
-            .addOnCompleteListener {
-                Log.d(TAG, "fetch plan collection completed")
-                buildMemoList(queryMemoItemList)
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this@MemoFragment.context, "memoList build failed", Toast.LENGTH_LONG).show()
-        }
-
-    }
+//    private fun fetchMemoSubList() = CoroutineScope(Dispatchers.IO).launch{
+//        try {
+//            // FireStore functionalities
+//            planRef.get().addOnSuccessListener { task ->
+//                for (document in task) {
+//                    val data = document.data
+//                    val spotName = data["name"] as String
+//                    val memo = data["memo"] as String
+//                    val order = data["order"] as Map<*, *>
+//                    val dayPosPair = Pair(order["day"], order["position"])
+//
+//                    // add to memoSubItemList here
+//                    queryMemoItemList.add(MemoSubItem(spotName, memo, dayPosPair as Pair<Long, Long>))
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "Error getting documents: ", exception)
+//            }
+//            .addOnCompleteListener {
+//                Log.d(TAG, "fetch plan collection completed")
+//                buildMemoList(queryMemoItemList)
+//            }
+//        } catch (e: Exception) {
+//            Toast.makeText(this@MemoFragment.context, "memoList build failed", Toast.LENGTH_LONG).show()
+//        }
+//
+//    }
 
     // build memo list from multiple memoSubLists
-    private fun buildMemoList(queryMemoItemList: ArrayList<MemoSubItem>) {
+    private fun buildMemoList(queryMemoItemList: ArrayList<MemoSubItem>): ArrayList<MemoItem> {
+        val memoItemList = ArrayList<MemoItem>()
         val dayMemoMap = queryMemoItemList.sortedWith(
             compareBy( { it.order.first}, {it.order.second} )
         ).groupBy {
@@ -104,15 +106,42 @@ class MemoFragment : Fragment(), CellClickListener {
         for ((day, memoSubItemList) in dayMemoMap) {
             memoItemList.add(MemoItem("Day $day", memoSubItemList as ArrayList<MemoSubItem>))
         }
+        return memoItemList
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun subscribeToRealTimeUpdates() {
+        planRef.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
+            firebaseFirestoreException?.let {
+                Toast.makeText(this.context, it.message, Toast.LENGTH_LONG).show()
+                return@addSnapshotListener
+            }
+            querySnapShot?.let {
+                val queryMemoItemList = ArrayList<MemoSubItem>()
+                for (document in it) {
+                    val data = document.data
+                    val spotName = data["name"] as String
+                    val memo = data["memo"] as String
+                    val order = data["order"] as Map<*, *>
+                    val dayPosPair = Pair(order["day"], order["position"])
+
+                    // add to memoSubItemList here
+                    queryMemoItemList.add(MemoSubItem(spotName, memo, dayPosPair as Pair<Long, Long>))
+                }
+                memoItemList = buildMemoList(queryMemoItemList)
+            }
+
+            view?.memo_list?.layoutManager = LinearLayoutManager(activity)
+            view?.memo_list?.adapter = MemoItemAdapter(memoItemList, this)
+        }
     }
 
     override fun onCellClickListener(data: MemoSubItem) {
         val editDialogFragment = MemoEditDialogFragment(data)
         editDialogFragment.show(childFragmentManager, "MemoEditDialog")
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
 
