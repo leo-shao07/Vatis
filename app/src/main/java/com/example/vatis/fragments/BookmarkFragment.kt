@@ -33,7 +33,7 @@ class BookmarkFragment : Fragment() {
             .collection("folder1")
             .document("file1")
             .collection("bookmarks")
-            .whereNotEqualTo("url", "")
+            .orderBy("title")
         val storageRef = FirebaseStorage.getInstance().reference
         val bookmarkList = ArrayList<BookmarkItem>()
         val titleThumbnailList = ArrayList<Pair<String, String>>()
@@ -75,23 +75,6 @@ class BookmarkFragment : Fragment() {
 
         return view
     }
-
-//    private fun retrieveBookmarks() = CoroutineScope(Dispatchers.IO).launch {
-//        try{
-//            val querySnapshot = bookmarksRef.get().await()
-//            for (document in querySnapshot.documents) {
-//                val data = document.data
-//                val title = data?.get("title") as String
-//                val thumbnail = data["thumbnail"] as String
-//                titleThumbnailList.add(Pair(title, thumbnail))
-//
-//            }
-//        } catch(e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(activity, "Bookmark retrieve failed.", Toast.LENGTH_LONG)
-//            }
-//        }
-//    }
 
     private fun addBookmarkItems(view: View, titleThumbnailList: ArrayList<Pair<String, String>>) = CoroutineScope(Dispatchers.IO).launch {
         for (item in titleThumbnailList) {
