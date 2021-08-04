@@ -60,8 +60,6 @@ class MemoFragment : Fragment(), CellClickListener {
     }
 
     override fun onCellClickListener(data: MemoSubItem) {
-        Toast.makeText(this.context, "memo_sub_item clicked", Toast.LENGTH_SHORT).show()
-        // var oldContent = view.memo_content_text.text
         val editDialogFragment = MemoEditDialogFragment(data)
         editDialogFragment.show(childFragmentManager, "MemoEditDialog")
     }

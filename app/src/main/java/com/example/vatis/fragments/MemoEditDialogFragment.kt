@@ -60,8 +60,6 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
 
         // SAVE BUTTON
         view.memo_edit_save_button.setOnClickListener {
-            Toast.makeText(this.context, "SAVE pressed", Toast.LENGTH_LONG).show()
-
             // content input
             view.memo_edit_content_input.visibility = View.INVISIBLE
 
@@ -73,6 +71,8 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
             // save button
             view.memo_edit_save_button.visibility = View.INVISIBLE
             view.memo_edit_save_button.isClickable = false
+
+            dismiss()
         }
 
         return view
