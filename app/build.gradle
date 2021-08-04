@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.vatis"
-        minSdkVersion 29
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -45,11 +46,20 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:20.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
+
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.ncapdevi:frag-nav:3.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
 }

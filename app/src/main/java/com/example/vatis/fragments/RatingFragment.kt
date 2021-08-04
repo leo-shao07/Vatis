@@ -1,16 +1,13 @@
-package com.example.vatis
+package com.example.vatis.fragments
 
 import android.os.Bundle
-import android.provider.Settings.Global.putString
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.vatis.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters
-
-class MemoFragment : Fragment() {
+class RatingFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
 
@@ -25,11 +22,12 @@ class MemoFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_memo, container, false)
+        return inflater.inflate(R.layout.fragment_rating, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
+
 
 }
