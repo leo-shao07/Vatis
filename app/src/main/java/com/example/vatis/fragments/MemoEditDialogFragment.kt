@@ -16,11 +16,29 @@ import com.example.vatis.adapters.MemoItemAdapter
 import com.example.vatis.items.MemoSubItem
 import com.example.vatis.R
 import com.example.vatis.items.MemoItem
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_memo.view.*
 import kotlinx.android.synthetic.main.fragment_memo_edit.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 
 class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
+    companion object {
+        // Hardcode db reference for now
+        val planRef = Firebase.firestore
+            .collection("users")
+            .document("python_test@gmail.com")
+            .collection("folder1")
+            .document("file1")
+            .collection("plan")
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +53,8 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
 
         view.memo_edit_spot_name.text = memoSubItem.spotName
         view.memo_edit_content_text.text = memoSubItem.content
+
+
 
         view.memo_edit_exit_button.setOnClickListener{
             dismiss()
@@ -60,11 +80,14 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
 
         // SAVE BUTTON
         view.memo_edit_save_button.setOnClickListener {
+            val content = view.memo_edit_text_input_layout.editText?.text.toString()
+            updateMemo(content)
+
             // content input
             view.memo_edit_content_input.visibility = View.INVISIBLE
 
             // content text
-            view.memo_edit_content_text.text = view.memo_edit_text_input_layout.editText?.text
+//            view.memo_edit_content_text.text = view.memo_edit_text_input_layout.editText?.text
             view.memo_edit_content_text.visibility = View.VISIBLE
             view.memo_edit_content_text.isClickable = true
 
@@ -76,6 +99,40 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
         }
 
         return view
+    }
+
+    private fun updateMemo(content: String) = CoroutineScope(Dispatchers.IO).launch{
+        val order = memoSubItem.order
+        val orderMap: HashMap<String, Long> = hashMapOf(
+            "day" to order.first,
+            "position" to order.second
+        )
+//        val contentMap: HashMap<String, String> = hashMapOf(
+//            "memo" to content
+//        )
+
+        // perform query on plan order
+        val spotQuery = planRef
+            .whereEqualTo("order", orderMap)
+            .get()
+            .await()
+
+        if (spotQuery.documents.isNotEmpty()) {
+            for (document in spotQuery) {
+                try {
+                    planRef.document(document.id).update("memo", content)
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@MemoEditDialogFragment.context, "Update memo failed", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        } else {
+            withContext(Dispatchers.Main){
+                Toast.makeText(this@MemoEditDialogFragment.context, "No spot matched the query", Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
