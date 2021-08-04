@@ -57,6 +57,7 @@
                 android:textSize="16sp"
                 android:paddingStart="12sp"
                 android:textColor="@color/green"
+                android:maxLines="10"
                 android:text="old content"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -68,13 +69,14 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/memo_edit_content_input"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:layout_width="250sp"
                     android:layout_height="250sp"
                     android:gravity="start"
                     android:paddingStart="12sp"
                     android:textColor="@color/green"
                     android:textSize="16sp"
+                    android:maxLines="10"
                     android:visibility="invisible"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
