@@ -2,6 +2,7 @@ package com.example.vatis.fragments
 
 
 import android.content.ContentValues.TAG
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -11,18 +12,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.vatis.CellClickListener
 import com.example.vatis.adapters.BookmarkAdapter
 import com.example.vatis.items.BookmarkItem
 import com.example.vatis.R
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_bookmark.view.*
+import kotlinx.android.synthetic.main.fragment_memo.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 
-class BookmarkFragment : Fragment() {
+class BookmarkFragment : Fragment(), CellClickListener {
     // TODO: parameters needed: user, folderName, fileName
 
     companion object {
@@ -36,80 +40,76 @@ class BookmarkFragment : Fragment() {
             .orderBy("title")
         val storageRef = FirebaseStorage.getInstance().reference
         val bookmarkList = ArrayList<BookmarkItem>()
-        val titleThumbnailList = ArrayList<Pair<String, String>>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        subscribeToRealTimeUpdates()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_bookmark, container, false)
-        val titleThumbnailList = ArrayList<Pair<String, String>>()
-
-        // FireStore functionalities
-        bookmarksRef.get().addOnSuccessListener { task ->
-            for (document in task) {
-                val data = document.data
-                val title = data["title"] as String
-                val thumbnail = data["thumbnail"] as String
-                titleThumbnailList.add(Pair(title, thumbnail))
-
-                // get url for direct access maybe
-                // val url = data["url"]
-            }
-        }
-        .addOnFailureListener { exception ->
-            Log.d(TAG, "Error getting documents: ", exception)
-            Toast.makeText(activity, "bookmarks retrieve failed", Toast.LENGTH_SHORT).show()
-        }
-        .addOnCompleteListener {
-            addBookmarkItems(view, titleThumbnailList)
-        }
-
-        //TODO: add listener for realtime changes
-
-        return view
+        return inflater.inflate(R.layout.fragment_bookmark, container, false)
     }
 
-    private fun addBookmarkItems(view: View, titleThumbnailList: ArrayList<Pair<String, String>>) = CoroutineScope(Dispatchers.IO).launch {
-        for (item in titleThumbnailList) {
-            val title = item.first
-            val thumbnail = item.second
+    private fun subscribeToRealTimeUpdates() {
+        bookmarksRef.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
+            firebaseFirestoreException?.let {
+                Toast.makeText(this.context, it.message, Toast.LENGTH_LONG).show()
+                return@addSnapshotListener
+            }
 
-            try {
-                val maxDownloadSize = 5L * 1024 * 1024
-                val bytes = storageRef.child(thumbnail).getBytes(maxDownloadSize).await()
-                val favicon = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            querySnapShot?.let {
+                for (document in it) {
+                    val data = document.data
+                    val title = data["title"] as String
+                    val thumbnail = data["thumbnail"] as String
 
-                withContext(Dispatchers.Main){
-                    bookmarkList.add(BookmarkItem(title, favicon))
-                    Log.d(TAG, "$thumbnail successfully downloaded")
-                }
-            } catch (e: Exception) {
-                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-                val favicon = BitmapFactory.decodeResource( // return default favicon if failed
-                    resources,
-                    R.drawable.googleg_standard_color_18
-                )
-                withContext(Dispatchers.Main){
-                    bookmarkList.add(BookmarkItem(title, favicon))
+                    Log.d(TAG, "Title: $title found")
+
+                    GlobalScope.launch(Dispatchers.IO) {
+                        val favicon = fetchThumbnailImage(thumbnail)
+                        withContext(Dispatchers.Main){
+                            bookmarkList.add(BookmarkItem(title, favicon))
+                        }
+                    }
                 }
             }
-        }
-        Log.d(TAG, "Bookmark list size (after): ${bookmarkList.size}")
-        withContext(Dispatchers.Main){
-            view.bookmark_list.adapter = BookmarkAdapter(bookmarkList)
-            view.bookmark_list.layoutManager = LinearLayoutManager(activity)
+
+            view?.bookmark_list?.adapter = BookmarkAdapter(bookmarkList)
+            view?.bookmark_list?.layoutManager = LinearLayoutManager(activity)
         }
     }
+
+    private suspend fun fetchThumbnailImage(thumbnail: String): Bitmap {
+
+        // default favicon if failed
+        var favicon: Bitmap = BitmapFactory.decodeResource(
+            resources,
+            R.drawable.googleg_standard_color_18
+        )
+
+        try {
+            val maxDownloadSize = 5L * 1024 * 1024
+            val bytes = storageRef.child(thumbnail).getBytes(maxDownloadSize).await()
+            favicon = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            Log.d(TAG, "$thumbnail download success")
+        } catch (e: Exception) {
+            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        }
+
+        return favicon
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onCellClickListener(data: BookmarkItem) {
+        Toast.makeText(this.context, "bookmark item clicked", Toast.LENGTH_LONG).show()
     }
 
 
