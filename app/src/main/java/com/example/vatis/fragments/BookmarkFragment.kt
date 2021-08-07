@@ -44,14 +44,16 @@ class BookmarkFragment : Fragment(), CellClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        subscribeToRealTimeUpdates()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+        val view = inflater.inflate(R.layout.fragment_bookmark, container, false)
+        subscribeToRealTimeUpdates()
+
+        return view
     }
 
     private fun subscribeToRealTimeUpdates() {
@@ -66,25 +68,26 @@ class BookmarkFragment : Fragment(), CellClickListener {
                     val data = document.data
                     val title = data["title"] as String
                     val thumbnail = data["thumbnail"] as String
+                    val url = data["url"] as String
 
-                    Log.d(TAG, "Title: $title found")
-
-                    GlobalScope.launch(Dispatchers.IO) {
+                    val fetchJob = GlobalScope.launch(Dispatchers.IO) {
                         val favicon = fetchThumbnailImage(thumbnail)
+                        bookmarkList.add(BookmarkItem(title, favicon, url))
+                        Log.d(TAG, "bookmarkItem added: $title")
+
                         withContext(Dispatchers.Main){
-                            bookmarkList.add(BookmarkItem(title, favicon))
+                            Log.d(TAG, "bookmarkList size after: ${bookmarkList.size}")
+                            view?.bookmark_list?.adapter = BookmarkAdapter(bookmarkList)
+                            view?.bookmark_list?.layoutManager = LinearLayoutManager(activity)
                         }
                     }
                 }
             }
 
-            view?.bookmark_list?.adapter = BookmarkAdapter(bookmarkList)
-            view?.bookmark_list?.layoutManager = LinearLayoutManager(activity)
         }
     }
 
     private suspend fun fetchThumbnailImage(thumbnail: String): Bitmap {
-
         // default favicon if failed
         var favicon: Bitmap = BitmapFactory.decodeResource(
             resources,
