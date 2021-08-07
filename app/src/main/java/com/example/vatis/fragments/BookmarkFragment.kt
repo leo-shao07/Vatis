@@ -39,11 +39,12 @@ class BookmarkFragment : Fragment(), CellClickListener {
             .collection("bookmarks")
             .orderBy("title")
         val storageRef = FirebaseStorage.getInstance().reference
-        val bookmarkList = ArrayList<BookmarkItem>()
+//        val bookmarkList = ArrayList<BookmarkItem>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        subscribeToRealTimeUpdates()
     }
 
     override fun onCreateView(
@@ -51,7 +52,7 @@ class BookmarkFragment : Fragment(), CellClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bookmark, container, false)
-        subscribeToRealTimeUpdates()
+
 
         return view
     }
@@ -64,6 +65,7 @@ class BookmarkFragment : Fragment(), CellClickListener {
             }
 
             querySnapShot?.let {
+                val bookmarkList = ArrayList<BookmarkItem>()
                 for (document in it) {
                     val data = document.data
                     val title = data["title"] as String
