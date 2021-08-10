@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,16 +60,14 @@ class MainActivity : AppCompatActivity() {
     private fun initFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction
-            .add(R.id.fragment_container, planFragment)
             .add(R.id.fragment_container, memoFragment)
+            .add(R.id.fragment_container, planFragment)
             .add(R.id.fragment_container, ratingFragment)
             .add(R.id.fragment_container, bookmarkFragment)
             .hide(memoFragment)
             .hide(ratingFragment)
             .hide(bookmarkFragment)
             .commit()
-
-//        transaction.replace(R.id.fragment_container,planFragment).commit()
     }
 
     private var listener =

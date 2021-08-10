@@ -35,9 +35,7 @@ class RatingFragment : Fragment() {
             .collection("plan")
             .orderBy("order.day")
 
-
         val storageRef = FirebaseStorage.getInstance().reference.child("python_test@gmail.com")
-        var ratingList = ArrayList<RatingItem>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +66,6 @@ class RatingFragment : Fragment() {
     }
 
     private suspend fun setLayoutAndAdapter(ratingList: ArrayList<RatingItem>){
-        Log.d(TAG, "setting layout manager and adapter...")
         withContext(Dispatchers.Main){
             view?.rating_list?.layoutManager = LinearLayoutManager(activity)
             view?.rating_list?.adapter = RatingAdapter(ratingList)
@@ -109,7 +106,7 @@ class RatingFragment : Fragment() {
             val maxDownloadSize = 5L * 1024 * 1024
             val bytes = storageRef.child(imagePath).getBytes(maxDownloadSize).await()
             spotImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            Log.d(ContentValues.TAG, "$imagePath download success")
+            Log.d(TAG, "$imagePath download success")
         } catch (e: Exception) {
             Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
         }

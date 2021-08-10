@@ -43,9 +43,7 @@ class MemoFragment : Fragment(), CellClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_memo, container, false)
-
         subscribeToRealTimeUpdates()
-
         return view
     }
 
@@ -86,8 +84,8 @@ class MemoFragment : Fragment(), CellClickListener {
                 memoItemList = buildMemoList(queryMemoItemList)
             }
 
-            view?.memo_list?.layoutManager = LinearLayoutManager(activity)
-            view?.memo_list?.adapter = MemoItemAdapter(memoItemList, this)
+            view?.memo_item_recyclerview?.layoutManager = LinearLayoutManager(activity)
+            view?.memo_item_recyclerview?.adapter = MemoItemAdapter(memoItemList, this)
         }
     }
 
