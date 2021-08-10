@@ -1,17 +1,13 @@
 package com.example.vatis.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vatis.CellClickListener
 import com.example.vatis.R
-import com.example.vatis.fragments.MemoEditDialogFragment
 import com.example.vatis.items.MemoItem
-import com.example.vatis.items.MemoSubItem
 import kotlinx.android.synthetic.main.memo_item.view.*
 
 

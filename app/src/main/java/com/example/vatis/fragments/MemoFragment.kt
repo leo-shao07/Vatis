@@ -1,9 +1,6 @@
 package com.example.vatis.fragments
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,17 +11,11 @@ import com.example.vatis.CellClickListener
 import com.example.vatis.adapters.MemoItemAdapter
 import com.example.vatis.items.MemoSubItem
 import com.example.vatis.R
-import com.example.vatis.items.BookmarkItem
 import com.example.vatis.items.MemoItem
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_memo.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+
 
 
 class MemoFragment : Fragment(), CellClickListener {
@@ -57,7 +48,6 @@ class MemoFragment : Fragment(), CellClickListener {
 
         return view
     }
-
 
 
     // build memo list from multiple memoSubLists
