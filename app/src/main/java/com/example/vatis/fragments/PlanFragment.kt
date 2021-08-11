@@ -21,6 +21,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_plan.*
 import kotlinx.android.synthetic.main.fragment_plan.view.*
+import kotlinx.android.synthetic.main.spot_item.*
 
 
 @SuppressLint("ResourceType")
@@ -52,14 +53,7 @@ class PlanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d(TAG, "on PlanFragment view created")
         subscribeToRealTimeUpdates()
-
-        btn_AddSpot.setOnClickListener{
-            val intent = Intent(this.context, AddSpotActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun buildPlanList(queryPlanItemList: ArrayList<SpotSubItem>): ArrayList<SpotItem> {
@@ -98,7 +92,6 @@ class PlanFragment : Fragment() {
             }
 
             view?.spot_item_recyclerview?.layoutManager = LinearLayoutManager(activity)
-            Log.d(TAG, "layout manager for planFragment set")
             view?.spot_item_recyclerview?.adapter = SpotItemAdapter(spotItemList)
         }
     }

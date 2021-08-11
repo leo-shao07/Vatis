@@ -1,13 +1,16 @@
 package com.example.vatis.adapters
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener
+import com.example.vatis.AddSpotActivity
 import com.example.vatis.R
 import com.example.vatis.items.SpotItem
 import com.example.vatis.items.SpotSubItem
@@ -24,6 +27,11 @@ class SpotItemAdapter(private val planItems: ArrayList<SpotItem>) :
             itemView.spot_sub_item_recyclerview.adapter = SpotSubItemAdapter(item.spotSubItemList)
             itemView.spot_sub_item_recyclerview.swipeListener = onItemSwipeListener
             itemView.spot_sub_item_recyclerview.dragListener = onItemDragListener
+
+            itemView.btn_AddSpot.setOnClickListener {
+                val intent = Intent(itemView.context, AddSpotActivity::class.java)
+                startActivity(itemView.context, intent, null)
+            }
         }
     }
 

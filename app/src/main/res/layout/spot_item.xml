@@ -46,4 +46,14 @@
         android:layout_below="@+id/day_header"
         app:divider="@drawable/list_divider"/>
 
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="#F1D1D1"
+        android:text="+"
+        android:id="@+id/btn_AddSpot"
+        android:layout_below="@id/spot_sub_item_recyclerview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginVertical="15sp"/>
+
 </RelativeLayout>
