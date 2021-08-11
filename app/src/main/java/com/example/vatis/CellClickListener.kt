@@ -1,10 +1,10 @@
 package com.example.vatis
 
-import com.example.vatis.items.BookmarkItem
-import com.example.vatis.items.MemoSubItem
-import com.example.vatis.items.RecommendationItem
+import com.example.vatis.items.*
 
 interface CellClickListener {
+    fun onCellClickListener(data: FolderItem) {}
+    fun onCellClickListener(data: PlanItem){}
     fun onCellClickListener(data: BookmarkItem) {}
     fun onCellClickListener(data: MemoSubItem) {}
     fun onCellClickListener(data: RecommendationItem) {}
