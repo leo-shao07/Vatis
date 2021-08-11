@@ -1,4 +1,4 @@
- package com.example.vatis
+package com.example.vatis
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.example.vatis.fragments.AddFolderDialogFragment
 import com.example.vatis.adapters.FolderItemAdapter
-import com.xwray.groupie.*
 import com.example.vatis.items.FolderItem
 import kotlinx.android.synthetic.main.activity_folder.*
 import kotlinx.android.synthetic.main.activity_plan.*
@@ -76,38 +75,33 @@ class FolderActivity: AppCompatActivity(), CellClickListener {
             )
             if (userEmail != null) {
                 db.collection("users").document(userEmail)
-                    .addSnapshotListener{querySnapShot, firebaseFirestoreException ->
-                firebaseFirestoreException?.let {
-                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                    return@addSnapshotListener
-                }
-                querySnapShot?.let {
-                    Log.d(TAG, querySnapShot.get("folders").toString())
-                    val queryfolderItemList = ArrayList<FolderItem>()
-                    if (querySnapShot.get("folders") != null) {
-                        val folderList = querySnapShot.get("folders") as List<String>
-                        for (folderName in folderList) {
-                            queryfolderItemList.add(FolderItem(folderName))
+                    .addSnapshotListener {querySnapShot, firebaseFirestoreException ->
+                        firebaseFirestoreException?.let {
+                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                            return@addSnapshotListener
                         }
-                        folderItemList = queryfolderItemList
-                    }
-                }
+                        querySnapShot?.let {
+                            Log.d(TAG, querySnapShot.get("folders").toString())
+                            val queryfolderItemList = ArrayList<FolderItem>()
+                            if (querySnapShot.get("folders") != null) {
+                                val folderList = querySnapShot.get("folders") as List<String>
+                                for (folderName in folderList) {
+                                    queryfolderItemList.add(FolderItem(folderName))
+                                }
+                                folderItemList = queryfolderItemList
+                            }
+                        }
 
                 folder_recyclerView.layoutManager = LinearLayoutManager(this)
                 folder_recyclerView.adapter = FolderItemAdapter(folderItemList, this)
+                }
             }
-            }
-
-
         }
-
     }
 
     override fun onCellClickListener(data: FolderItem) {
-        Log.d(TAG, "click123")
         val intent = Intent(this, PlanActivity::class.java)
         intent.putExtra("folderName", data.folderName)
         startActivity(intent)
-
     }
 }

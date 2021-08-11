@@ -22,7 +22,7 @@ class AddFolderDialogFragment() : DialogFragment() {
     companion object {
         val TAG = "AddFolderDialogFragment"
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

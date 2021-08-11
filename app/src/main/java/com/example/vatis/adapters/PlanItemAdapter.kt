@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.journote_login.R
+import com.example.vatis.CellClickListener
+import com.example.vatis.R
 import com.example.vatis.items.PlanItem
 import kotlinx.android.synthetic.main.plan_row.view.*
 

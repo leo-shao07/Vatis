@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JourNote_Login</string>
+    <string name="app_name">Vatis</string>
     <string name="bio">Hi, my name is Aleks.
 \n\nI love fish.
 \n\nThe kind that is alive and swims around in an aquarium or river, or a lake, and definitely the ocean.
@@ -20,8 +20,10 @@
     <string name="account">Account</string>
     <string name="email">Email</string>
     <string name="password_confirmation">Password Confirmation</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -43,6 +45,7 @@
     <string name="clear">clear</string>
     <string name="enter_the_folder_name">Enter the Folder Name</string>
     <string name="title_activity_test">Test</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
