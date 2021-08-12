@@ -8,30 +8,49 @@ import com.example.vatis.fragments.BookmarkFragment
 import com.example.vatis.fragments.MemoFragment
 import com.example.vatis.fragments.PlanFragment
 import com.example.vatis.fragments.RatingFragment
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        private val planFragment = PlanFragment()
-        private val memoFragment = MemoFragment()
-        private val ratingFragment = RatingFragment()
-        private val bookmarkFragment = BookmarkFragment()
         val auth = FirebaseAuth.getInstance()
+
+        lateinit var planRef: DocumentReference
+        lateinit var planFragment: PlanFragment
+        lateinit var memoFragment: MemoFragment
+        lateinit var ratingFragment: RatingFragment
+        lateinit var bookmarkFragment: BookmarkFragment
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val folderName = intent.getStringExtra("folderName")!!
+        val planName = intent.getStringExtra("planName")!!
+
         val user: FirebaseUser? = auth.currentUser
         if (user != null) {
-            // user action
+            val userEmail = user.email!!
+
+            // init plan reference to pass in
+            planRef = Firebase.firestore
+                .collection("users")
+                .document(userEmail)
+                .collection(folderName)
+                .document(planName)
+
+            // init fragments with user data
+            planFragment = PlanFragment(planRef)
+            memoFragment = MemoFragment(planRef)
+            ratingFragment = RatingFragment(planRef)
+            bookmarkFragment = BookmarkFragment(planRef)
 
         } else {
             signInAsAnonymous()
@@ -108,6 +127,5 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
 }
 

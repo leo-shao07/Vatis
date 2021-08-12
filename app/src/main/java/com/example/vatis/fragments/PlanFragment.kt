@@ -1,10 +1,7 @@
 package com.example.vatis.fragments
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,23 +22,15 @@ import kotlinx.android.synthetic.main.spot_item.*
 
 
 @SuppressLint("ResourceType")
-class PlanFragment : Fragment() {
+class PlanFragment(private val fileRef: DocumentReference) : Fragment() {
     companion object {
-        // Hardcode db reference for now
-        val db = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("plan")
-            .orderBy("order.day")
-
+        lateinit var planRef: Query
         var spotItemList = ArrayList<SpotItem>()
     }
 
-    // TODO: Rename and change types of parameters
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        planRef = fileRef.collection("plan").orderBy("order.day")
     }
 
     override fun onCreateView(
@@ -71,7 +60,7 @@ class PlanFragment : Fragment() {
     }
 
     private fun subscribeToRealTimeUpdates() {
-        db.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
+        planRef.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
             firebaseFirestoreException?.let {
                 Toast.makeText(this.context, it.message, Toast.LENGTH_LONG).show()
                 return@addSnapshotListener

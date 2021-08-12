@@ -20,8 +20,9 @@ import com.example.vatis.CellClickListener
 import com.example.vatis.adapters.BookmarkAdapter
 import com.example.vatis.items.BookmarkItem
 import com.example.vatis.R
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_bookmark.view.*
@@ -30,25 +31,10 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 
-class BookmarkFragment() : Fragment(), CellClickListener {
-    // TODO: parameters needed: user, folderName, fileName
-
+class BookmarkFragment(private val fileRef: DocumentReference) : Fragment(), CellClickListener {
     companion object {
-        // Hardcode db reference for now
-        val bookmarksRef = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("bookmarks")
-
-        val bookmarksQuery = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("bookmarks")
-            .orderBy("title")
+        lateinit var bookmarksRef: CollectionReference
+        lateinit var bookmarksQuery: Query
 
         val storageRef = FirebaseStorage.getInstance().reference
         var bookmarkList = ArrayList<BookmarkItem>()
@@ -56,6 +42,10 @@ class BookmarkFragment() : Fragment(), CellClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        bookmarksRef = fileRef.collection("bookmarks")
+        bookmarksQuery = bookmarksRef.orderBy("title")
+
         subscribeToRealTimeUpdates()
     }
 
@@ -63,8 +53,7 @@ class BookmarkFragment() : Fragment(), CellClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_bookmark, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_bookmark, container, false)
     }
 
     private fun subscribeToRealTimeUpdates() {
@@ -128,12 +117,12 @@ class BookmarkFragment() : Fragment(), CellClickListener {
     }
 
 
-    private fun getSwipeCallback(): ItemTouchHelper.SimpleCallback{
-        val callback = object : ItemTouchHelper.SimpleCallback(
+    private fun getSwipeCallback(): ItemTouchHelper.SimpleCallback {
+        return object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT // add RIGHT for spot extraction maybe
-        ){
-            val deleteColor = this@BookmarkFragment.context?.let { ContextCompat.getColor(it, R.color.DELETE_COLOR) }
+        ) {
+            val deleteColor = context?.let { ContextCompat.getColor(it, R.color.DELETE_COLOR) }
             val deleteIcon = R.drawable.ic_baseline_delete_24
 
             override fun onMove(
@@ -163,19 +152,33 @@ class BookmarkFragment() : Fragment(), CellClickListener {
                 isCurrentlyActive: Boolean
             ) {
                 deleteColor?.let {
-                    RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    RecyclerViewSwipeDecorator.Builder(
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
                         .addBackgroundColor(it)
                         .addSwipeLeftActionIcon(deleteIcon)
                         .create()
                         .decorate()
                 }
 
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
             }
 
         }
-
-        return callback
     }
 
     private fun deleteBookmark(bookmarkId: String){

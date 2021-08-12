@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FieldValue
 import kotlinx.android.synthetic.main.fragment_add_folder_dialog.view.*
 
 
-class AddFolderDialogFragment() : DialogFragment() {
+class AddFolderDialogFragment: DialogFragment() {
 
     private val db = Firebase.firestore
 
@@ -50,8 +50,6 @@ class AddFolderDialogFragment() : DialogFragment() {
             addFolder(folderNameText)
         }
 
-
-
         return view
     }
 
@@ -63,9 +61,8 @@ class AddFolderDialogFragment() : DialogFragment() {
         dialog!!.window!!.attributes = params as WindowManager.LayoutParams
         dialog!!.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
-    private fun addFolder(FolderName: String) {
-
-        if (FolderName.isEmpty()) {
+    private fun addFolder(folderName: String) {
+        if (folderName.isEmpty()) {
             Toast.makeText(activity, "Please enter the Folder Name", Toast.LENGTH_SHORT).show()
             return
         }
@@ -75,11 +72,10 @@ class AddFolderDialogFragment() : DialogFragment() {
         val createFolderData = hashMapOf(
             "importCode" to null,
             "setOff" to null
-
         )
 
         if (userEmail != null) {
-            db.collection("users").document(userEmail).collection(FolderName)
+            db.collection("users").document(userEmail).collection(folderName)
                 .add(createFolderData)
                 .addOnSuccessListener {
                     Log.d(TAG, "Folder successfully written!")
@@ -89,47 +85,9 @@ class AddFolderDialogFragment() : DialogFragment() {
                     Log.w(TAG, "Error adding folder", e)
                 }
             val dbRef = db.collection("users").document(userEmail)
-            dbRef.update("folders", FieldValue.arrayUnion(FolderName))
+            dbRef.update("folders", FieldValue.arrayUnion(folderName))
         }
 
     }
 
 }
-
-//class AddFolderDialogFragment : DialogFragment() {
-//
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        val binding = DataBindingUtil.inflate<FragmentAddFolderDialogBinding>(
-//            inflater, R.layout.fragment_add_folder_dialog, container, false
-//        )
-//
-//        binding.addFolderToolbar.inflateMenu(R.menu.dialog_menu)
-//        binding.addFolderToolbar.setOnMenuItemClickListener{
-//            when(it.itemId){
-//                R.id.dialog_menu_clear_button -> {
-//                    dismiss()
-//                }
-//            }
-//            false
-//        }
-//
-//        return binding.root
-//    }
-//    override fun onResume() {
-//        super.onResume()
-//        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-//        params.width = WindowManager.LayoutParams.MATCH_PARENT
-//        params.height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
-//    }
-//}

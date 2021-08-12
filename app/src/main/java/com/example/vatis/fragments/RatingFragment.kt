@@ -1,6 +1,5 @@
 package com.example.vatis.fragments
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vatis.R
 import com.example.vatis.adapters.RatingAdapter
 import com.example.vatis.items.RatingItem
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,22 +25,15 @@ import kotlinx.android.synthetic.main.fragment_rating.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
-class RatingFragment : Fragment() {
+class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
     companion object {
-        // Hardcode db reference for now
-        val planRef = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("plan")
-            .orderBy("order.day")
-
+        lateinit var planRef: Query
         val storageRef = FirebaseStorage.getInstance().reference.child("python_test@gmail.com")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        planRef = fileRef.collection("plan").orderBy("order.day")
     }
 
     override fun onCreateView(

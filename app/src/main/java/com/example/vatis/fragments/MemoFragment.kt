@@ -12,30 +12,23 @@ import com.example.vatis.adapters.MemoItemAdapter
 import com.example.vatis.items.MemoSubItem
 import com.example.vatis.R
 import com.example.vatis.items.MemoItem
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_memo.view.*
 
 
 
-class MemoFragment : Fragment(), CellClickListener {
+class MemoFragment(private val fileRef: DocumentReference) : Fragment(), CellClickListener {
     companion object {
-        // Hardcode db reference for now
-        val planRef = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("plan")
-            .orderBy("order.day")
-
+        lateinit var planRef: Query
         var memoItemList = ArrayList<MemoItem>()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        planRef = fileRef.collection("plan").orderBy("order.day")
     }
 
     override fun onCreateView(
@@ -46,7 +39,6 @@ class MemoFragment : Fragment(), CellClickListener {
         subscribeToRealTimeUpdates()
         return view
     }
-
 
     // build memo list from multiple memoSubLists
     private fun buildMemoList(queryMemoItemList: ArrayList<MemoSubItem>): ArrayList<MemoItem> {

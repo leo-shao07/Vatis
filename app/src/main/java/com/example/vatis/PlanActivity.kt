@@ -21,12 +21,13 @@ import kotlinx.android.synthetic.main.plan_row.view.*
 
 
 class PlanActivity :AppCompatActivity(), CellClickListener {
-
     companion object{
         val TAG = "PlanActivity"
         val dbRef = Firebase.firestore.collection("users")
         var planItemList = ArrayList<PlanItem>()
+        lateinit var folderName: String
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plan)
@@ -36,8 +37,8 @@ class PlanActivity :AppCompatActivity(), CellClickListener {
         plan_delete_text.visibility = View.INVISIBLE
         delete_plan_fab.visibility = View.INVISIBLE
 
-        val folderName = intent.getStringExtra("folderName")
-        if (folderName != null) {
+        folderName = intent.getStringExtra("folderName").toString()
+        if (folderName.isNotEmpty()) {
             fetchUserPlan(folderName)
         }
 
@@ -47,13 +48,10 @@ class PlanActivity :AppCompatActivity(), CellClickListener {
             startActivity(intent)
         }
 
-
         create_plan_button.setOnClickListener {
             val addPlanDialogFragment = folderName?.let { it1 -> AddPlanDialogFragment(it1) }
             addPlanDialogFragment?.show(supportFragmentManager, "addPlanDialog")
         }
-
-
     }
 
     private fun verifyUserIsLoggedIn() {
@@ -90,14 +88,14 @@ class PlanActivity :AppCompatActivity(), CellClickListener {
                     plan_recyclerView.layoutManager = LinearLayoutManager(this)
                     plan_recyclerView.adapter = PlanItemAdapter(planItemList, this)
                 }
-
         }
-
     }
 
     override fun onCellClickListener(data: PlanItem) {
-        Log.d(TAG, "click123")
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("folderName", folderName)
+        intent.putExtra("planName", data.planName)
+        startActivity(intent)
     }
-
 }
 

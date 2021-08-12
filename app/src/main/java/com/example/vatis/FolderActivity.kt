@@ -33,11 +33,6 @@ class FolderActivity: AppCompatActivity(), CellClickListener {
         fetchUserFolder()
 
         folder_toolbar.inflateMenu(R.menu.nav_menu)
-        /*folder_toolbar.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }*/
         folder_toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_profile_button -> {
@@ -49,7 +44,7 @@ class FolderActivity: AppCompatActivity(), CellClickListener {
         }
 
         create_folder_fab.setOnClickListener {
-            var dialog = AddFolderDialogFragment()
+            val dialog = AddFolderDialogFragment()
             dialog.show(supportFragmentManager,"AddFolderDialog")
         }
 
@@ -70,9 +65,7 @@ class FolderActivity: AppCompatActivity(), CellClickListener {
         val user = Firebase.auth.currentUser
         user?.let {
             val userEmail = user.email
-            val userPath = hashMapOf(
-                "docPath" to "users/" + userEmail
-            )
+
             if (userEmail != null) {
                 db.collection("users").document(userEmail)
                     .addSnapshotListener {querySnapShot, firebaseFirestoreException ->
@@ -92,8 +85,8 @@ class FolderActivity: AppCompatActivity(), CellClickListener {
                             }
                         }
 
-                folder_recyclerView.layoutManager = LinearLayoutManager(this)
-                folder_recyclerView.adapter = FolderItemAdapter(folderItemList, this)
+                    folder_recyclerView.layoutManager = LinearLayoutManager(this)
+                    folder_recyclerView.adapter = FolderItemAdapter(folderItemList, this)
                 }
             }
         }

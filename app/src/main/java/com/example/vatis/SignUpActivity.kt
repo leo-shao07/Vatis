@@ -71,18 +71,19 @@ class SignUpActivity : AppCompatActivity() {
 
         val user = hashMapOf(
             "uid" to uid,
-            "name" to username
+            "name" to username,
+            "folders" to ArrayList<String>()
         )
 
+        // init user DB structure
         db.collection("users").document(email)
             .set(user)
             .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot  successfully written!")
+                Log.d(TAG, "DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
             }
-
     }
 
 

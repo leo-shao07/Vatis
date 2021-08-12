@@ -19,11 +19,10 @@ class LoginActivity : AppCompatActivity() {
             performLogin(email_login.text.toString(), password_login.text.toString())
         }
 
-        have_no_account_text.setOnClickListener{view: View ->
+        have_no_account_text.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-
         }
 
     }
