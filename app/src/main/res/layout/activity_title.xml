@@ -9,10 +9,10 @@
         android:background="@drawable/bg1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/fragment_horizontal_margin"
-        android:paddingTop="@dimen/fragment_vertical_margin"
-        android:paddingRight="@dimen/fragment_horizontal_margin"
-        android:paddingBottom="@dimen/fragment_vertical_margin"
+        android:paddingLeft="16sp"
+        android:paddingTop="16sp"
+        android:paddingRight="16sp"
+        android:paddingBottom="16sp"
         tools:context=".ui.TitleFragment">
 
 
@@ -20,11 +20,11 @@
             android:id="@+id/title_name_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="172dp"
+            android:layout_marginTop="172sp"
             android:fontFamily="@font/poppins_semibold"
             android:text="BACK"
             android:textColor="@color/themePink"
-            android:textSize="80dp"
+            android:textSize="80sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.085"
@@ -35,11 +35,11 @@
             android:id="@+id/title_name_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="68sp"
             android:fontFamily="@font/poppins_semibold"
             android:text="PACKER"
             android:textColor="@color/themePink"
-            android:textSize="80dp"
+            android:textSize="80sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/title_login_button"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,34 +49,14 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <Button
-            android:id="@+id/title_signup_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="70dp"
-            android:layout_marginBottom="208dp"
-            android:background="@drawable/rounded_button_signup"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="@string/signup"
-            android:textColor="@color/themeWhite"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.351" />
-
-        <Button
             android:id="@+id/title_login_button"
-            android:layout_width="0dp"
+            android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="70dp"
-            android:layout_marginBottom="272dp"
+            android:layout_marginStart="70sp"
+            android:layout_marginTop="16sp"
+            android:layout_marginEnd="70sp"
+            android:layout_marginBottom="272sp"
             android:background="@drawable/rounded_button_login"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/login"
@@ -88,6 +68,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="0.059" />
 
+        <Button
+            android:id="@+id/title_signup_button"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="70sp"
+            android:layout_marginTop="16sp"
+            android:layout_marginEnd="70sp"
+            android:layout_marginBottom="208sp"
+            android:background="@drawable/rounded_button_signup"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/signup"
+            android:textColor="@color/themeWhite"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.351" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

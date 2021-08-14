@@ -54,8 +54,6 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
         view.memo_edit_spot_name.text = memoSubItem.spotName
         view.memo_edit_content_text.text = memoSubItem.content
 
-
-
         view.memo_edit_exit_button.setOnClickListener{
             dismiss()
         }
@@ -107,9 +105,6 @@ class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
             "day" to order.first,
             "position" to order.second
         )
-//        val contentMap: HashMap<String, String> = hashMapOf(
-//            "memo" to content
-//        )
 
         // perform query on plan order
         val spotQuery = planRef

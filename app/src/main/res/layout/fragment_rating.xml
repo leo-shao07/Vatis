@@ -31,14 +31,14 @@
             android:id="@+id/rating_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/rating_appbar"
-            tools:listitem="@layout/rating_item"/>
+            android:layout_centerHorizontal="true"
+            tools:listitem="@layout/rating_item" />
 
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/share_button"
+        android:id="@+id/rating_share_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

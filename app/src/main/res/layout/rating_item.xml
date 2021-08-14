@@ -14,11 +14,42 @@
         android:gravity="start"
         android:padding="20sp">
 
-        <ImageView
-            android:id="@+id/rating_image"
-            android:layout_width="match_parent"
-            android:layout_height="200sp"
-            android:src="@drawable/rating_1"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/rating_image"
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:src="@drawable/rating_1"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
+
+                <Button
+                    android:id="@+id/rating_upload_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="圖片上傳"
+                    android:clickable="false"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/rating_cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="取消"
+                    android:clickable="false"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="280sp"
