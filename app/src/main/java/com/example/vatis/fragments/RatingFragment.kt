@@ -46,6 +46,7 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
         var position: Int? = null
 
         lateinit var showCommentEditDialog: (RatingItem) -> Unit
+        lateinit var showScoreEditDialogFragment: (RatingItem) -> Unit
     }
 
     private val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -71,6 +72,11 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
         showCommentEditDialog = {
             val editDialogFragment = RatingCommentEditDialogFragment(it, planRef)
             editDialogFragment.show(childFragmentManager, "RatingCommentEditDialog")
+        }
+
+        showScoreEditDialogFragment = {
+            val editDialogFragment = RatingScoreEditDialogFragment(it, planRef)
+            editDialogFragment.show(childFragmentManager, "RatingScoreEditDialog")
         }
 
         val userPath = fileRef.parent.parent?.id

@@ -11,6 +11,7 @@ import com.example.vatis.fragments.RatingFragment
 import com.example.vatis.fragments.RatingFragment.Companion.launchGetImage
 import com.example.vatis.fragments.RatingFragment.Companion.selectImage
 import com.example.vatis.fragments.RatingFragment.Companion.showCommentEditDialog
+import com.example.vatis.fragments.RatingFragment.Companion.showScoreEditDialogFragment
 import com.example.vatis.items.RatingItem
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.android.synthetic.main.rating_item.view.*
@@ -50,13 +51,14 @@ class RatingAdapter(private val ratingItems: ArrayList<RatingItem>, private val 
                 resumeImageView(itemView)
             }
 
+            /**************** rating_comment_text ****************/
             itemView.rating_comment_text.setOnClickListener {
                 showCommentEditDialog(item)
             }
 
             /**************** rating_score_text ****************/
             itemView.rating_score_text.setOnClickListener {
-                Toast.makeText(itemView.context, "score pressed", Toast.LENGTH_SHORT).show()
+                showScoreEditDialogFragment(item)
             }
         }
     }
