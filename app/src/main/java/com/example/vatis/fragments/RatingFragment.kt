@@ -41,16 +41,17 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
         lateinit var selectImage: (String, Int) -> Unit
         lateinit var launchGetImage: () -> Unit
 
-        const val REQUEST_CODE_IMAGE_PICK = 0
         var imageFile: Uri? = null
         var docId: String? = null
         var position: Int? = null
+
+        lateinit var showCommentEditDialog: (RatingItem) -> Unit
     }
 
-    val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        requireView().rating_list[position!!].rating_image.setImageURI(it)
-        imageFile = it
-        docId?.let { it1 -> uploadImageToStorage(planRef, it1) }
+    private val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        requireView().rating_list[position!!].rating_image.setImageURI(uri)
+        imageFile = uri
+        docId?.let { it -> uploadImageToStorage(planRef, it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,10 +68,28 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
             getImage.launch("image/*")
         }
 
+        showCommentEditDialog = {
+            val editDialogFragment = RatingCommentEditDialogFragment(it, planRef)
+            editDialogFragment.show(childFragmentManager, "RatingCommentEditDialog")
+        }
+
         val userPath = fileRef.parent.parent?.id
         storageRef = userPath?.let {
             FirebaseStorage.getInstance().reference.child(it)
         }!!
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_rating, container, false)
+        subscribeToRealTimeUpdates()
+
+        view.rating_share_button.setOnClickListener {
+            Toast.makeText(this.context, "share button pressed", Toast.LENGTH_SHORT).show()
+        }
+        return view
     }
 
     // upload to Storage and update Firestore spot "image"
@@ -89,19 +108,6 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
                 Toast.makeText(this@RatingFragment.context, e.message, Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_rating, container, false)
-        subscribeToRealTimeUpdates()
-
-        view.rating_share_button.setOnClickListener {
-            Toast.makeText(this.context, "share button pressed", Toast.LENGTH_SHORT).show()
-        }
-        return view
     }
 
     private fun subscribeToRealTimeUpdates() {

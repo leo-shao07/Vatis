@@ -12,6 +12,7 @@ import com.example.vatis.adapters.MemoItemAdapter
 import com.example.vatis.items.MemoSubItem
 import com.example.vatis.R
 import com.example.vatis.items.MemoItem
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -22,13 +23,15 @@ import kotlinx.android.synthetic.main.fragment_memo.view.*
 
 class MemoFragment(private val fileRef: DocumentReference) : Fragment(), CellClickListener {
     companion object {
-        lateinit var planRef: Query
+        lateinit var planRef: CollectionReference
+        lateinit var planQuery: Query
         var memoItemList = ArrayList<MemoItem>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        planRef = fileRef.collection("plan").orderBy("order.day")
+        planRef = fileRef.collection("plan")
+        planQuery = planRef.orderBy("order.day")
     }
 
     override fun onCreateView(
@@ -56,7 +59,7 @@ class MemoFragment(private val fileRef: DocumentReference) : Fragment(), CellCli
     }
 
     private fun subscribeToRealTimeUpdates() {
-        planRef.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
+        planQuery.addSnapshotListener { querySnapShot, firebaseFirestoreException ->
             firebaseFirestoreException?.let {
                 Toast.makeText(this.context, it.message, Toast.LENGTH_LONG).show()
                 return@addSnapshotListener
@@ -82,7 +85,7 @@ class MemoFragment(private val fileRef: DocumentReference) : Fragment(), CellCli
     }
 
     override fun onCellClickListener(data: MemoSubItem) {
-        val editDialogFragment = MemoEditDialogFragment(data)
+        val editDialogFragment = MemoEditDialogFragment(data, planRef)
         editDialogFragment.show(childFragmentManager, "MemoEditDialog")
     }
 

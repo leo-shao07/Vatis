@@ -16,6 +16,7 @@ import com.example.vatis.adapters.MemoItemAdapter
 import com.example.vatis.items.MemoSubItem
 import com.example.vatis.R
 import com.example.vatis.items.MemoItem
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_memo.view.*
@@ -28,21 +29,14 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 
-class MemoEditDialogFragment(val memoSubItem: MemoSubItem) : DialogFragment() {
+class MemoEditDialogFragment(val memoSubItem: MemoSubItem, val planRef: CollectionReference) : DialogFragment() {
     companion object {
-        // Hardcode db reference for now
-        val planRef = Firebase.firestore
-            .collection("users")
-            .document("python_test@gmail.com")
-            .collection("folder1")
-            .document("file1")
-            .collection("plan")
+
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(

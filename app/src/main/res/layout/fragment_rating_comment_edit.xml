@@ -93,9 +93,7 @@
             android:textColor="@color/green"
             app:strokeWidth="1sp"
             app:cornerRadius="20sp"
-            android:textSize="16sp"
-            android:visibility="invisible"
-            android:clickable="false"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
