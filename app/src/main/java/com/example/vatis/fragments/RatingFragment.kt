@@ -1,6 +1,7 @@
 package com.example.vatis.fragments
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -17,6 +18,7 @@ import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vatis.R
+import com.example.vatis.ShareActivity
 import com.example.vatis.adapters.RatingAdapter
 import com.example.vatis.items.RatingItem
 import com.google.firebase.firestore.CollectionReference
@@ -37,6 +39,8 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
         lateinit var planRef: CollectionReference
         lateinit var planQuery: Query
         lateinit var storageRef: StorageReference
+
+        lateinit var userEmail: String
 
         lateinit var selectImage: (String, Int) -> Unit
         lateinit var launchGetImage: () -> Unit
@@ -79,10 +83,10 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
             editDialogFragment.show(childFragmentManager, "RatingScoreEditDialog")
         }
 
-        val userPath = fileRef.parent.parent?.id
-        storageRef = userPath?.let {
+        userEmail = fileRef.parent.parent?.id.toString()
+        storageRef = userEmail.let {
             FirebaseStorage.getInstance().reference.child(it)
-        }!!
+        }
     }
 
     override fun onCreateView(
@@ -94,6 +98,12 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
 
         view.rating_share_button.setOnClickListener {
             Toast.makeText(this.context, "share button pressed", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this.context, ShareActivity::class.java).apply{
+                putExtra("userEmail", userEmail)
+                putExtra("folderName", planRef.parent?.id)
+                putExtra("planName", planRef.id)
+            }
+            startActivity(intent)
         }
         return view
     }
