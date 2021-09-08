@@ -55,6 +55,7 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
 
     private val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         requireView().rating_list[position!!].rating_image.setImageURI(uri)
+        requireView().rating_list
         imageFile = uri
         docId?.let { it -> uploadImageToStorage(planRef, it) }
     }
@@ -106,6 +107,10 @@ class RatingFragment(private val fileRef: DocumentReference) : Fragment() {
             startActivity(intent)
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     // upload to Storage and update Firestore spot "image"

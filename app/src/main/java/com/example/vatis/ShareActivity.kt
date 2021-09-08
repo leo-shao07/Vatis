@@ -1,31 +1,26 @@
 package com.example.vatis
 
-import android.content.ContentValues.TAG
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vatis.fragments.*
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_share.*
 
 
 class ShareActivity : AppCompatActivity() {
     companion object {
         lateinit var planRef: DocumentReference
 
-        lateinit var shareOptionFragment: ShareOptionFragment
-        lateinit var shareIgSelectFragment: ShareIgSelectFragment
-        lateinit var shareJournalSelectFragment: ShareJournalSelectFragment
+        lateinit var shareOptionsFragment: ShareOptionsFragment
+
+        lateinit var shareIgOptionsFragment: ShareIgOptionsFragment
+        lateinit var shareIgTemplateFragment: ShareIgTemplateFragment
+//        lateinit var shareIgOutputFragment: ShareIgOutputFragment
+
+        lateinit var shareJournalOptionsFragment: ShareJournalOptionsFragment
+        lateinit var shareJournalTemplateFragment: ShareJournalTemplateFragment
+//        lateinit var shareJournalOutputFragment: ShareJournalOutputFragment
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +39,15 @@ class ShareActivity : AppCompatActivity() {
             .document(planName)
 
         // init fragments
-        shareOptionFragment = ShareOptionFragment(planRef)
-        shareIgSelectFragment = ShareIgSelectFragment(planRef)
-        shareJournalSelectFragment = ShareJournalSelectFragment(planRef)
+        shareOptionsFragment = ShareOptionsFragment(planRef)
+
+        shareIgOptionsFragment = ShareIgOptionsFragment(planRef)
+        shareIgTemplateFragment = ShareIgTemplateFragment(planRef)
+//        shareIgOutputFragment = ShareIgOutputFragment(planRef)
+
+        shareJournalOptionsFragment = ShareJournalOptionsFragment(planRef)
+        shareJournalTemplateFragment = ShareJournalTemplateFragment(planRef)
+//        shareJournalOutputFragment = ShareJournalOutputFragment(planRef)
 
         initFragment()
     }
@@ -54,13 +55,28 @@ class ShareActivity : AppCompatActivity() {
     private fun initFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction
-            .add(R.id.share_fragment_container, shareOptionFragment, "SHARE_OPTION")
-            .add(R.id.share_fragment_container, shareIgSelectFragment, "SHARE_IG_SELECT")
-            .add(R.id.share_fragment_container, shareJournalSelectFragment, "SHARE_JOURNAL_SELECT")
-            .hide(shareIgSelectFragment)
-            .hide(shareJournalSelectFragment)
+            .add(R.id.share_fragment_container, shareOptionsFragment, "SHARE_OPTIONS")
+            .add(R.id.share_fragment_container, shareIgOptionsFragment, "SHARE_IG_OPTIONS")
+            .add(R.id.share_fragment_container, shareIgTemplateFragment, "SHARE_IG_TEPLATE")
+//            .add(R.id.share_fragment_container, shareIgOutputFragment, "SHARE_IG_OUTPUT")
+            .add(R.id.share_fragment_container, shareJournalOptionsFragment, "SHARE_JOURNAL_OPTIONS")
+            .add(R.id.share_fragment_container, shareJournalTemplateFragment, "SHARE_JOURNAL_TEPLATE")
+//            .add(R.id.share_fragment_container, shareJournalOutputFragment, "SHARE_JOURNAL_OUTPUT")
+            .hide(shareIgOptionsFragment)
+            .hide(shareIgTemplateFragment)
+//            .hide(shareIgOutputFragment)
+            .hide(shareJournalOptionsFragment)
+            .hide(shareJournalTemplateFragment)
+//            .hide(shareJournalOutputFragment)
             .commit()
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }
 

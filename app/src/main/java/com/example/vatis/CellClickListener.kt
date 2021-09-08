@@ -8,5 +8,6 @@ interface CellClickListener {
     fun onCellClickListener(data: BookmarkItem) {}
     fun onCellClickListener(data: MemoSubItem) {}
     fun onCellClickListener(data: RecommendationItem) {}
+    fun onCellClickListener(data: TemplateItem) {}
 
 }

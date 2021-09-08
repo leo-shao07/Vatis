@@ -15,38 +15,19 @@
         android:paddingBottom="16sp"
         tools:context=".ui.TitleFragment">
 
-
         <TextView
-            android:id="@+id/title_name_1"
+            android:id="@+id/title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="172sp"
+            android:layout_marginBottom="60sp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="BACK"
-            android:textColor="@color/themePink"
-            android:textSize="80sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.085"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/title_name_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="68sp"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="PACKER"
+            android:text="VATIS"
             android:textColor="@color/themePink"
             android:textSize="80sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/title_login_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.829"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_name_1"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/title_login_button"

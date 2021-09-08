@@ -41,7 +41,7 @@ class RatingAdapter(private val ratingItems: ArrayList<RatingItem>, private val 
             /**************** rating_upload_button ****************/
             itemView.rating_upload_button.setOnClickListener {
                 Toast.makeText(itemView.context, "upload pressed", Toast.LENGTH_SHORT).show()
-                selectImage(item.id, this.absoluteAdapterPosition)
+                selectImage(item.id, this.bindingAdapterPosition)
                 launchGetImage()
                 resumeImageView(itemView)
             }

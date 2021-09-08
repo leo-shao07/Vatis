@@ -15,4 +15,10 @@
         <item name="android:layout_marginTop">@dimen/layout_margin</item>
     </style>
 
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/ic_baseline_arrow_drop_down_24</item>
+    </style>
+
 </resources>
