@@ -2,6 +2,7 @@ package com.example.vatis.fragments
 
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -20,6 +21,8 @@ import com.example.vatis.CellClickListener
 import com.example.vatis.adapters.BookmarkAdapter
 import com.example.vatis.items.BookmarkItem
 import com.example.vatis.R
+import com.example.vatis.ShareActivity
+import com.example.vatis.WebActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
@@ -83,7 +86,7 @@ class BookmarkFragment(private val fileRef: DocumentReference) : Fragment(), Cel
                             Log.d(TAG, "bookmarkList size after: ${bookmarkList.size}")
 
                             val recyclerView = view?.bookmark_list
-                            recyclerView?.adapter = BookmarkAdapter(bookmarkList)
+                            recyclerView?.adapter = BookmarkAdapter(bookmarkList, this@BookmarkFragment)
                             recyclerView?.layoutManager = LinearLayoutManager(activity)
 
                             val callback = getSwipeCallback()
@@ -194,8 +197,12 @@ class BookmarkFragment(private val fileRef: DocumentReference) : Fragment(), Cel
     }
 
     override fun onCellClickListener(data: BookmarkItem) {
-        Toast.makeText(this.context, "bookmark item clicked", Toast.LENGTH_LONG).show()
-    }
+        Toast.makeText(this.context, "bookmark item pressed!", Toast.LENGTH_LONG).show()
 
+        val intent = Intent(this.context, WebActivity::class.java).apply{
+            putExtra("url", data.url)
+        }
+        startActivity(intent)
+    }
 
 }

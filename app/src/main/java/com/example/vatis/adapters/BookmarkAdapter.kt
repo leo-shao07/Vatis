@@ -4,12 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vatis.CellClickListener
 import com.example.vatis.items.BookmarkItem
 import com.example.vatis.R
 import kotlinx.android.synthetic.main.bookmark_item.view.*
 
 
-class BookmarkAdapter(val bookmarkItems: ArrayList<BookmarkItem>) :
+class BookmarkAdapter(private val bookmarkItems: ArrayList<BookmarkItem>,
+                      private val cellClickListener: CellClickListener
+) :
     RecyclerView.Adapter<BookmarkAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -25,7 +28,11 @@ class BookmarkAdapter(val bookmarkItems: ArrayList<BookmarkItem>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(bookmarkItems[position])
+        val data = bookmarkItems[position]
+        holder.bindItems(data)
+        holder.itemView.setOnClickListener {
+            cellClickListener.onCellClickListener(data)
+        }
     }
 
     override fun getItemCount(): Int {
