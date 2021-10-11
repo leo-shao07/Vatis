@@ -113,9 +113,27 @@ class ShareIgOutputFragment(private val planRef: DocumentReference, private val 
     //TODO: query logic
     //TODO: convert XML layout to Bitmap
     private fun buildBestRated(): Bitmap{
+        // spot with the highest score
+        // photo, name, score from this spot
+
         return BitmapFactory.decodeResource(resources, R.drawable.best_rated)
     }
 
+    private fun buildSixPhoto(): Bitmap{
+        // 2 restaurant spots
+        // photo of the spots
+
+        return BitmapFactory.decodeResource(resources, R.drawable.six_photo_preview)
+    }
+
+    private fun buildStayTime(): Bitmap{
+        // 3 spots
+        // photo, duration of these spots
+
+        return BitmapFactory.decodeResource(resources, R.drawable.stay_time_preview)
+    }
+
+    /********************************************************************************/
     private fun buildCombine(): Bitmap{
         return BitmapFactory.decodeResource(resources, R.drawable.combine_preview)
     }
@@ -130,14 +148,6 @@ class ShareIgOutputFragment(private val planRef: DocumentReference, private val 
 
     private fun buildPolaroid(): Bitmap{
         return BitmapFactory.decodeResource(resources, R.drawable.polaroid_preview)
-    }
-
-    private fun buildSixPhoto(): Bitmap{
-        return BitmapFactory.decodeResource(resources, R.drawable.six_photo_preview)
-    }
-
-    private fun buildStayTime(): Bitmap{
-        return BitmapFactory.decodeResource(resources, R.drawable.stay_time_preview)
     }
 
     private fun buildWhiteCoffee(): Bitmap{
